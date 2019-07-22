@@ -1,0 +1,19 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Role-based authorization
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+    }
+
+    match /projects/{docId} {
+      allow read, write: if getUserData().roles['admin'] == true
+      || resource.data.members.hasAny([request.auth.uid])
+    }
+
+    match /{document=**} {
+      allow read: if false;
+      allow write: if false;
+    }
+  }
+}

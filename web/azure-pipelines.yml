@@ -1,0 +1,27 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - development
+
+variables:
+  - group: Firebase-staging
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install
+      npm install --prefix ./functions
+      npm i -g firebase-tools
+      npm i -g tslint
+      firebase deploy --token "$(fb_ci_token)" --project $(fb_project)
+    displayName: 'Deploy to Firebase-staging'

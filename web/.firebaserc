@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "bunkr-app",
+    "staging": "bunkr-app-staging"
+  }
+}
